@@ -1,0 +1,9 @@
+# MariaDB
+# ------------------------------------------------------------------------------
+MYSQL_USER=mikel
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
+MYSQL_DB=python_developer
+MYSQL_PASSWORD=mikel
+MYSQL_ROOT_PASSWORD=root
+

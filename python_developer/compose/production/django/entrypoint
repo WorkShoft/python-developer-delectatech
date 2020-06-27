@@ -1,0 +1,51 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+if [ -z "${MYSQL_USER}" ]; then
+    base_mysql_image_default_user="root"
+    export MYSQL_USER="${base_mysql_image_default_user}"
+fi
+export DATABASE_URL="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}"
+echo $DATABASE_URL;
+
+mysql_ready() {
+python << END
+import sys
+
+from MySQLdb import _mysql
+
+try:
+    sys.stdout.write("${DATABASE_URL}")
+    
+    # config = {
+    #     "db": "${MYSQL_DB}",
+    #     "user": "${MYSQL_USER}",
+    #     "passwd": "${MYSQL_PASSWORD}",
+    #     "host": "${MYSQL_HOST}",
+    #     "port": "3306",
+    # }
+
+    # _mysql.connect(
+    #     **config
+    # )
+
+    
+except _mysql.OperationalError:
+
+    sys.exit(-1)
+sys.exit(0)
+
+END
+}
+until mysql_ready; do
+  >&2 echo 'Waiting for MySQL to become available...'
+  sleep 1
+done
+>&2 echo 'MySQL is available'
+
+exec "$@"
+
+

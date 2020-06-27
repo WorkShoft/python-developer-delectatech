@@ -1,0 +1,33 @@
+version: '3'
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+
+services:
+  mysql:
+    image: mariadb
+    restart: always
+    env_file: 
+      - ./.envs/.local/.mariadb
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: python_developer_local_django
+    container_name: django
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.mariadb
+    ports:
+      - "8000:8000"
+    command: /start        
+

@@ -1,0 +1,211 @@
+#+HTML_HEAD: <link href="https://github.com/kaushalmodi/.emacs.d/blob/master/misc/css/leuven_theme.css" rel="stylesheet">
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
+#+TITLE: SQLALCHEMY NOTES
+
+* SQLALCHEMY NOTES
+** Create an engine 
+
+#+BEGIN_SRC
+from sqlalchemy import create_engine
+
+
+engine = create_engine('sqlite:///:memory:', echo=True)
+#+END_SRC
+
+** Declare a mapping
+#+BEGIN_SRC python
+from sqlalchemy.ext.declarative import declarative_base
+
+
+Base = declarative_base()
+#+END_SRC
+
+** Map a table with a class
+#+BEGIN_SRC python
+from sqlalchemy import Column, Integer, String
+
+
+class User(Base):
+    __tablename__ = 'users'
+
+     id = Column(Integer, primary_key=True)
+     name = Column(String)
+     fullname = Column(String)
+     nickname = Column(String)
+
+     def __repr__(self):
+        return "<User(name='%s', fullname='%s', nickname='%s')>" % (
+                             self.name, self.fullname, self.nickname)
+#+END_SRC
+** Inspect table metadata
+#+BEGIN_SRC python
+User.__table__ 
+Table('users', MetaData(bind=None),
+      Column('id', Integer(), table=<users>, primary_key=True, nullable=False),
+      Column('name', String(), table=<users>),
+      Column('fullname', String(), table=<users>),
+      Column('nickname', String(), table=<users>), schema=None)
+#+END_SRC
+** Issue a CREATE TABLE statement
+#+BEGIN_SRC python
+Base.metadata.create_all(engine)
+#+END_SRC
+
+** Create a session
+#+BEGIN_SRC python
+from sqlalchemy.orm import sessionmaker
+
+
+Session = sessionmaker(bind=engine
+Session.configure(bind=engine)
+session = Session()
+#+END_SRC
+
+** Add and update objects
+#+BEGIN_SRC python
+ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
+session.add(ed_user)
+#+END_SRC
+** Add many objects
+#+BEGIN_SRC python
+session.add_all([
+    User(name='wendy', fullname='Wendy Williams', nickname='windy'),
+    User(name='mary', fullname='Mary Contrary', nickname='mary'),
+    User(name='fred', fullname='Fred Flintstone', nickname='freddy')])
+#+END_SRC
+** Some session properties
+#+BEGIN_SRC python
+session.dirty
+session.new
+#+END_SRC
+
+** Commit a transaction
+#+BEGIN_SRC python
+session.commit()
+#+END_SRC
+
+** Roll back changes
+#+BEGIN_SRC python
+session.rollback()
+#+END_SRC
+
+** Query
+#+BEGIN_SRC python
+for instance in session.query(User).order_by(User.id):
+    print(instance.name, instance.fullname)
+#+END_SRC
+
+** Common Filter Operators
+#+BEGIN_SRC python
+#1    
+
+ColumnOperators.__eq__():
+query.filter(User.name == 'ed')
+
+#2  
+
+ColumnOperators.__ne__():
+ query.filter(User.name != 'ed')
+
+#3
+
+ ColumnOperators.like():   
+ query.filter(User.name.like('%ed%'))
+#+END_SRC   
+
+** Building a relationship
+#+BEGIN_SRC python
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+
+
+class Address(Base):
+    __tablename__ = 'addresses'
+     id = Column(Integer, primary_key=True)
+     email_address = Column(String, nullable=False)
+     user_id = Column(Integer, ForeignKey('users.id'))
+
+     user = relationship("User", back_populates="addresses")
+
+     def __repr__(self):
+         return "<Address(email_address='%s')>" % self.email_address
+
+User.addresses = relationship(
+    Address", order_by=Address.id, back_populates="user")
+#+END_SRC 
+
+** Working with related objects
+#+BEGIN_SRC python
+jack = User(name='jack', fullname='Jack Bean', nickname='gjffdd')
+jack.addresses = [
+Address(email_address='jack@google.com'),
+                 Address(email_address='j25@yahoo.com')]
+
+jack.addresses[1].user
+<User(name='jack', fullname='Jack Bean', nickname='gjffdd')>
+#+END_SRC 
+
+#+BEGIN_SRC python
+jack = session.query(User).\
+       filter_by(name='jack').one()
+#+END_SRC 
+** Querying with Joins
+#+BEGIN_SRC python
+for u, a in session.query(User, Address).\
+    filter(User.id==Address.user_id).\
+    filter(Address.email_address=='jack@google.com').\
+    all():
+    print(u)
+    print(a)
+#+END_SRC 
+#+BEGIN_SRC python
+session.query(User).join(Address).\
+	filter(Address.email_address=='jack@google.com').\
+	all()
+#+END_SRC 
+
+#+BEGIN_SRC python
+query.join(Address, User.id==Address.user_id) # explicit condition
+query.join(User.addresses)                    # specify relationship from left to right
+query.join(Address, User.addresses)           # same, with explicit target
+#+END_SRC 
+
+** Using aliases
+#+BEGIN_SRC python
+from sqlalchemy.orm import aliased
+
+
+adalias1 = aliased(Address)
+adalias2 = aliased(Address)
+
+for username, email1, email2 in \
+    session.query(User.name, adalias1.email_address, adalias2.email_address).\
+    join(User.addresses.of_type(adalias1)).\
+    join(User.addresses.of_type(adalias2)).\
+    filter(adalias1.email_address=='jack@google.com').\
+    filter(adalias2.email_address=='j25@yahoo.com'):
+
+    print(username, email1, email2)
+jack jack@google.com j25@yahoo.com
+#+END_SRC 
+
+** Using Subqueries
+#+BEGIN_SRC python
+from sqlalchemy.sql import func
+stmt = session.query(Address.user_id, func.count('*').\
+	label('address_count')).\
+	group_by(Address.user_id).subquery()
+#+END_SRC 
+** Selecting Entities from Subqueries
+#+BEGIN_SRC python
+stmt = session.query(Address).\
+        filter(Address.email_address != 'j25@yahoo.com').\
+        subquery()
+adalias = aliased(Address, stmt)
+for user, address in session.query(User, adalias).\
+        join(adalias, User.addresses):
+    print(user)
+    print(address)
+<User(name='jack', fullname='Jack Bean', nickname='gjffdd')>
+<Address(email_address='jack@google.com')>
+#+END_SRC 

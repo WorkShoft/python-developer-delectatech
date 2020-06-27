@@ -1,0 +1,30 @@
+#+HTML_HEAD: <link href="https://github.com/kaushalmodi/.emacs.d/blob/master/misc/css/leuven_theme.css" rel="stylesheet">
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
+#+TITLE: Python Developer - Mikel Losada
+
+* DOCS
+** Get Docker
+https://docs.docker.com/engine/install/
+
+** Running Docker as a non sudo user
+https://docs.docker.com/engine/install/linux-postinstall/
+
+** Django app
+*** Docker setup
+#+BEGIN_SRC
+$ docker-compose -f local.yml up
+#+END_SRC
+
+** MongoDB
+
+** MariaDB
+
+** FAQ
+*** What tool did you use to create this documentation?
+Emacs and org-mode, with the [[https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup][Big Blow theme]]. The source is docs.org (in this folder).
+
+*** How do you generate HTML on Org Mode?
+[[https://orgmode.org/manual/HTML-export-commands.html#HTML-export-commands][By pressing C-c C-e h-h]].
+
+*** How did you set up this project?
+[[https://github.com/pydanny/cookiecutter-django][I used Django Cookiecutter]].
