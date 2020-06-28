@@ -5,7 +5,6 @@ class Segment(models.Model):
     uidentifier = models.UUIDField(primary_key=True)
     
     name = models.TextField()
-    size = models.IntegerField()
     average_popularity_rate = models.FloatField(null=True)
     average_satisfaction_rate = models.FloatField(null=True)
     average_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
@@ -13,6 +12,10 @@ class Segment(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def size(self):
+        return len(self.restaurants.all())
 
     
 class Restaurant(models.Model):
