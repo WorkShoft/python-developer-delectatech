@@ -18,7 +18,7 @@ class Restaurant(models.Model):
     uidentifier = models.UUIDField(primary_key=True)
     
     name = models.TextField()
-    street_address = models.TextField()
+    street_address = models.TextField(null=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7)
     latitude = models. DecimalField(max_digits=10, decimal_places=7)
     city_name = models.TextField()
