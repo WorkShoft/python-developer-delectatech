@@ -8,6 +8,7 @@ redis==3.5.0  # https://github.com/andymccurdy/redis-py
 hiredis==1.0.1  # https://github.com/redis/hiredis-py
 PyMySQL==0.9.3
 ijson==3.1.post0
+pymongo==3.10.1
 
 # Django
 # ------------------------------------------------------------------------------
