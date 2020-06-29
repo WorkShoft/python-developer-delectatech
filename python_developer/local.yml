@@ -14,6 +14,16 @@ services:
       - 3306:3306
     expose:
       - 3306
+  mongo:
+    image: mongo
+    command: ["--bind_ip_all"]
+    restart: always
+    ports:
+      - 27017:27017
+    env_file: 
+      - ./.envs/.local/.mongodb
+    volumes:
+      - .:/mongodata
   django:
     build:
       context: .
@@ -22,11 +32,13 @@ services:
     container_name: django
     depends_on:
       - mysql
+      - mongo
     volumes:
       - .:/app
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.mariadb
+      - ./.envs/.local/.mongodb          
     ports:
       - "8000:8000"
     command: /start        

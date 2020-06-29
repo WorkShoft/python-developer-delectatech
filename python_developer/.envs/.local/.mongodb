@@ -1,0 +1,5 @@
+# MongoDB
+# ------------------------------------------------------------------------------
+MONGO_INITDB_ROOT_DATABASE=python_developer_db
+MONGO_INITDB_ROOT_USERNAME=root
+MONGO_INITDB_ROOT_PASSWORD=example
