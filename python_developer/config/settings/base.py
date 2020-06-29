@@ -4,6 +4,8 @@ Base settings to build other settings files upon.
 from pathlib import Path
 
 import environ
+import pymysql
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # python_developer/
@@ -40,6 +42,12 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
+
+# Fake PyMySQL's version and install as MySQLdb
+# https://adamj.eu/tech/2020/02/04/how-to-use-pymysql-with-django/
+pymysql.version_info = (1, 4, 6, "current", 0)
+pymysql.install_as_MySQLdb()
+
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 

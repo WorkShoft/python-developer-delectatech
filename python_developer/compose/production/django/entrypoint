@@ -15,27 +15,26 @@ mysql_ready() {
 python << END
 import sys
 
-from MySQLdb import _mysql
+import pymysql
 
 try:
     sys.stdout.write("${DATABASE_URL}")
     
-    # config = {
-    #     "db": "${MYSQL_DB}",
-    #     "user": "${MYSQL_USER}",
-    #     "passwd": "${MYSQL_PASSWORD}",
-    #     "host": "${MYSQL_HOST}",
-    #     "port": "3306",
-    # }
+    config = {
+        "db": "${MYSQL_DB}",
+        "user": "${MYSQL_USER}",
+        "password": "${MYSQL_PASSWORD}",
+        "host": "${MYSQL_HOST}",
+        "port": 3306,
+    }
 
-    # _mysql.connect(
-    #     **config
-    # )
+    connection = pymysql.connect(**config)
+    connection.close()    
 
-    
-except _mysql.OperationalError:
+except:
+    sys.exit(-1)    
 
-    sys.exit(-1)
+
 sys.exit(0)
 
 END
@@ -44,7 +43,7 @@ until mysql_ready; do
   >&2 echo 'Waiting for MySQL to become available...'
   sleep 1
 done
->&2 echo 'MySQL is available'
+>&2 printf '\nMySQL is available\n'
 
 exec "$@"
 
