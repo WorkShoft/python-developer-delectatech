@@ -11,10 +11,17 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
          parser.add_argument('json', nargs='+', type=str)
 
-    def handle(self, *args, **kwargs):        
+    def handle(self, *args, **kwargs):
+        DYNAMIC_FIELDS = ('size', 'restaurants')
+
         with open(kwargs['json'][0], 'r') as f:
             try:                
-                segment_data = [{k:v for k, v in i.items() if k != 'restaurants'} for i in ijson.items(f, "item")]
+                segment_data = [
+                    {
+                        k:v for k, v in i.items() if k not in DYNAMIC_FIELDS
+                    } for i in ijson.items(f, "item")
+                ]
+                
                 f.seek(0) # process the file again
                 segment_restaurant_data = (i for i in ijson.items(f, "item.restaurants"))              
 

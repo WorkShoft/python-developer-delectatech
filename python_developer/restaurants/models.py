@@ -10,14 +10,24 @@ class Segment(models.Model):
     average_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     total_reviews = models.IntegerField(null=True)
 
-    def __str__(self):
-        return self.name
-
     @property
     def size(self):
         return len(self.restaurants.all())
 
-    
+    def __str__(self):
+        return self.name
+
+    def as_dict(self):
+        return {
+            "name": self.name,
+            "size": self.size,
+            "uidentifier": str(self.uidentifier),
+            "restaurants": [
+                r.as_dict() for r in self.restaurants.all()                    
+            ]                
+        }
+
+
 class Restaurant(models.Model):
     uidentifier = models.UUIDField(primary_key=True)
     
@@ -35,5 +45,19 @@ class Restaurant(models.Model):
     
     def __str__(self):
         return self.name
+
+    def as_dict(self):
+        return {
+            "name": self.name,
+            "street_address": self.street_address,
+            "latitude": float(self.latitude) if self.latitude else None,
+            "longitude": float(self.longitude) if self.longitude else None,
+            "city_name": self.city_name,
+            "popularity_rate": float(self.popularity_rate) if self.popularity_rate else None,
+            "satisfaction_rate": float(self.satisfaction_rate) if self.satisfaction_rate else None,
+            "total_reviews": int(self.total_reviews) if self.total_reviews else None,
+            "uidentifier": str(self.uidentifier),
+            "average_price": float(self.average_price) if self.average_price else None,
+        }
 
 
