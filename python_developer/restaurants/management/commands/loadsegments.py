@@ -11,10 +11,10 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
          parser.add_argument('json', nargs='+', type=str)
 
-    def handle(self, *args, **kwargs):
+    def handle(self, *args, **options):
         DYNAMIC_FIELDS = ('size', 'restaurants')
 
-        with open(kwargs['json'][0], 'r') as f:
+        with open(options['json'][0], 'r') as f:
             try:                
                 segment_data = [
                     {
