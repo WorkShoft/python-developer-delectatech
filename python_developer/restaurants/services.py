@@ -24,7 +24,9 @@ def get_mongo_client():
 
 def embed_restaurant_data(segment_collection, restaurant_json, command=None):
     """
-    Embed restaurants by intersecting uid data
+    Embed restaurants by intersecting restaurant and segment uids
+    segment_collection: mongodb segment collection
+    restaurant_json: list of restaurant objects in JSON format
     command (optional): BaseCommand. if set a success message will be printed using the command's styles
     """
 
