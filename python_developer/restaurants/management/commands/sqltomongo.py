@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
             # Clear collection and migrate data
             segment_collection.remove({})
-            
+
             self.stdout.write(self.style.MIGRATE_HEADING(f"Inserting data into MongoDB..."))
             segment_collection.insert(data)
 
@@ -30,6 +30,3 @@ class Command(BaseCommand):
 
         except Exception as e:
             self.stdout.write(self.style.ERROR(e))
-                
-
-
