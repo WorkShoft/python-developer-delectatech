@@ -2,8 +2,6 @@ up:
 	docker-compose -f local.yml up
 build:
 	docker-compose -f local.yml build
-createsuperuser:
-	docker-compose -f local.yml run django python manage.py createsuperuser
 loadmongo:
 	docker-compose -f local.yml run django python manage.py loadmongo restaurants_input.json segments_input.json
 loadsql:
@@ -16,7 +14,15 @@ dumpsqltojson:
 	docker-compose -f local.yml run django python manage.py dumpsqltojson database_`date "+%Y-%m-%d"`.json
 sqltomongo:
 	docker-compose -f local.yml run django python manage.py sqltomongo
+mongotosql:
+	docker-compose -f local.yml run django python manage.py mongotosql
 setupmysql:
 	docker exec -i python_developer_mysql mysql -uroot -proot < scripts/setup_mysql.sql
 shell:
 	docker-compose -f local.yml run django python manage.py shell
+createsuperuser:
+	docker-compose -f local.yml run django python manage.py createsuperuser
+makemigrations:
+	docker-compose -f local.yml run django python manage.py makemigrations
+migrate:
+	docker-compose -f local.yml run django python manage.py migrate
