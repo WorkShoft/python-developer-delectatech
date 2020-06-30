@@ -22,9 +22,8 @@ class Command(BaseCommand):
                 self.load_segments(segment_json, db)
                 self.load_restaurants(restaurant_json, db)
                     
-            except IntegrityError as e:
+            except Exception as e: 
                 self.stdout.write(self.style.ERROR(e))
-
 
     def load_segments(self, segment_json, db):
         """ 
@@ -37,7 +36,6 @@ class Command(BaseCommand):
         segment_collection.drop()
         segment_data = services.generator_from_json(segment_json)
         segment_collection.insert_many([i for i in segment_data])
-
 
     def load_restaurants(self, restaurant_json, db):
         """
