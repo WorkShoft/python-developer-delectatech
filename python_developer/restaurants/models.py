@@ -17,14 +17,28 @@ class Segment(models.Model):
     def __str__(self):
         return self.name
 
-    def as_dict(self):
+    def as_dict(self, extra_fields=False):
+        if extra_fields:
+            return {
+                "name": self.name,
+                "size": self.size,
+                "uidentifier": str(self.uidentifier),
+                "restaurants": [
+                    r.as_dict() for r in self.restaurants.all()                    
+                ],
+                "average_popularity_rate": self.average_popularity_rate,
+                "average_satisfaction_rate": self.average_satisfaction_rate,
+                "average_price": self.average_price,
+                "total_reviews": self.total_reviews,
+            }
+            
         return {
             "name": self.name,
             "size": self.size,
             "uidentifier": str(self.uidentifier),
             "restaurants": [
                 r.as_dict() for r in self.restaurants.all()                    
-            ]                
+            ],                
         }
 
 
