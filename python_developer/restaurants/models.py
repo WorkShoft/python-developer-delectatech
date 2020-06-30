@@ -52,8 +52,8 @@ class Restaurant(models.Model):
     city_name = models.TextField()
     popularity_rate = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     satisfaction_rate = models.DecimalField(max_digits=4, decimal_places=2, null=True)
-    total_reviews = models.IntegerField()
-    average_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_reviews = models.IntegerField(null=True)
+    average_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
 
     segments = models.ManyToManyField(Segment, related_name="restaurants")
     
