@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-06-27 sáb 09:53 -->
+<!-- 2020-06-30 mar 16:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Python Developer - Mikel Losada</title>
@@ -246,22 +246,30 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org83a24a4">1. DOCS</a>
+<li><a href="#org6e6f711">1. DOCS</a>
 <ul>
-<li><a href="#orgb2090de">1.1. Get Docker</a></li>
-<li><a href="#org24018c4">1.2. Running Docker as a non sudo user</a></li>
-<li><a href="#org7f41cb2">1.3. Django app</a>
+<li><a href="#org06e586f">1.1. Get Docker</a></li>
+<li><a href="#org6296389">1.2. Running Docker as a non sudo user</a></li>
+<li><a href="#org360c53e">1.3. Make commands</a>
 <ul>
-<li><a href="#orgd3e459e">1.3.1. Docker setup</a></li>
+<li><a href="#orge180d30">1.3.1. setupmysql</a></li>
+<li><a href="#org5c7fef7">1.3.2. up</a></li>
+<li><a href="#orgbb9e971">1.3.3. build</a></li>
+<li><a href="#org0710bcf">1.3.4. createsuperuser</a></li>
+<li><a href="#org49d282e">1.3.5. loadmongo</a></li>
+<li><a href="#orgd0c407a">1.3.6. loadsql</a></li>
+<li><a href="#org6a24ed6">1.3.7. dumpmongo</a></li>
+<li><a href="#org4edc076">1.3.8. dumpsql</a></li>
+<li><a href="#orgfa5c10f">1.3.9. dumpsqltojson</a></li>
 </ul>
 </li>
-<li><a href="#orga6f66ed">1.4. MongoDB</a></li>
-<li><a href="#orge7c4355">1.5. MariaDB</a></li>
-<li><a href="#orgc9130e2">1.6. FAQ</a>
+<li><a href="#orgdad9c63">1.4. MongoDB</a></li>
+<li><a href="#orgec54652">1.5. MariaDB</a></li>
+<li><a href="#org0525db1">1.6. FAQ</a>
 <ul>
-<li><a href="#org7e97122">1.6.1. What tool did you use to create this documentation?</a></li>
-<li><a href="#orgddef678">1.6.2. How do you generate HTML on Org Mode?</a></li>
-<li><a href="#org94f812d">1.6.3. How did you set up this project?</a></li>
+<li><a href="#org896851a">1.6.1. What tool did you use to create this documentation?</a></li>
+<li><a href="#orgdb63476">1.6.2. How do you generate HTML on Org Mode?</a></li>
+<li><a href="#orgd5f8ad5">1.6.3. How did you set up this project?</a></li>
 </ul>
 </li>
 </ul>
@@ -270,12 +278,12 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org83a24a4" class="outline-2">
-<h2 id="org83a24a4"><span class="section-number-2">1</span> DOCS</h2>
+<div id="outline-container-org6e6f711" class="outline-2">
+<h2 id="org6e6f711"><span class="section-number-2">1</span> DOCS</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgb2090de" class="outline-3">
-<h3 id="orgb2090de"><span class="section-number-3">1.1</span> Get Docker</h3>
+<div id="outline-container-org06e586f" class="outline-3">
+<h3 id="org06e586f"><span class="section-number-3">1.1</span> Get Docker</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 <a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a>
@@ -283,8 +291,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org24018c4" class="outline-3">
-<h3 id="org24018c4"><span class="section-number-3">1.2</span> Running Docker as a non sudo user</h3>
+<div id="outline-container-org6296389" class="outline-3">
+<h3 id="org6296389"><span class="section-number-3">1.2</span> Running Docker as a non sudo user</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 <a href="https://docs.docker.com/engine/install/linux-postinstall/">https://docs.docker.com/engine/install/linux-postinstall/</a>
@@ -292,34 +300,140 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org7f41cb2" class="outline-3">
-<h3 id="org7f41cb2"><span class="section-number-3">1.3</span> Django app</h3>
+<div id="outline-container-org360c53e" class="outline-3">
+<h3 id="org360c53e"><span class="section-number-3">1.3</span> Make commands</h3>
 <div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-orgd3e459e" class="outline-4">
-<h4 id="orgd3e459e"><span class="section-number-4">1.3.1</span> Docker setup</h4>
+<div id="outline-container-orge180d30" class="outline-4">
+<h4 id="orge180d30"><span class="section-number-4">1.3.1</span> setupmysql</h4>
 <div class="outline-text-4" id="text-1-3-1">
+<p>
+Creates the python_developer SQL database.
+</p>
+
+<p>
+Creates the mikel user with password 'mikel' and grants it all privileges, flushing them afterwards.
+</p>
+
+<p>
+<b>You will need to run this command after you do a fresh build.</b>
+</p>
+</div>
+</div>
+<div id="outline-container-org5c7fef7" class="outline-4">
+<h4 id="org5c7fef7"><span class="section-number-4">1.3.2</span> up</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+Runs Django, MariaDB and MongoDB containers.
+</p>
+
+<p>
+Access Django at 
+</p>
 <pre class="example">
-$ docker-compose -f local.yml up
+0.0.0.0:8000 
 </pre>
 </div>
 </div>
+<div id="outline-container-orgbb9e971" class="outline-4">
+<h4 id="orgbb9e971"><span class="section-number-4">1.3.3</span> build</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+Builds Django, MariaDB and MongoDB containers.
+</p>
+</div>
+</div>
+<div id="outline-container-org0710bcf" class="outline-4">
+<h4 id="org0710bcf"><span class="section-number-4">1.3.4</span> createsuperuser</h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+Creates a Django superuser.
+</p>
+
+<p>
+Run this once to create a superuser and access the admin site at 
+</p>
+<pre class="example">
+0.0.0.0:8000/admin
+</pre>
+</div>
+</div>
+<div id="outline-container-org49d282e" class="outline-4">
+<h4 id="org49d282e"><span class="section-number-4">1.3.5</span> loadmongo</h4>
+<div class="outline-text-4" id="text-1-3-5">
+<p>
+Creates a Mongo collection in the python_developer_db database.
+</p>
+
+<p>
+<b>segments_input.json</b> and <b>restaurants_input.json</b> must be in the root folder.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd0c407a" class="outline-4">
+<h4 id="orgd0c407a"><span class="section-number-4">1.3.6</span> loadsql</h4>
+<div class="outline-text-4" id="text-1-3-6">
+<p>
+Populates the python_developer MySQL database.
+</p>
+
+<p>
+<b>segments_input.json</b> and <b>restaurants_input.json</b> must be in the root folder.
+</p>
+</div>
+</div>
+<div id="outline-container-org6a24ed6" class="outline-4">
+<h4 id="org6a24ed6"><span class="section-number-4">1.3.7</span> dumpmongo</h4>
+<div class="outline-text-4" id="text-1-3-7">
+<p>
+Creates a dump of the python_developer_db Mongo database using mongodump. 
+</p>
+
+<p>
+This dump is gzip-compressed.
+</p>
+</div>
+</div>
+<div id="outline-container-org4edc076" class="outline-4">
+<h4 id="org4edc076"><span class="section-number-4">1.3.8</span> dumpsql</h4>
+<div class="outline-text-4" id="text-1-3-8">
+<p>
+Creates a dump of the python_developer MySQL database using mysqldump. 
+</p>
+
+<p>
+This dump is in SQL format.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfa5c10f" class="outline-4">
+<h4 id="orgfa5c10f"><span class="section-number-4">1.3.9</span> dumpsqltojson</h4>
+<div class="outline-text-4" id="text-1-3-9">
+<p>
+Creates a dump of the python_developer MySQL database using the dumpsqltojson custom django-admin command.
+</p>
+
+<p>
+This dump is in JSON format.
+</p>
+</div>
+</div>
 </div>
 
-<div id="outline-container-orga6f66ed" class="outline-3">
-<h3 id="orga6f66ed"><span class="section-number-3">1.4</span> MongoDB</h3>
+<div id="outline-container-orgdad9c63" class="outline-3">
+<h3 id="orgdad9c63"><span class="section-number-3">1.4</span> MongoDB</h3>
 </div>
 
-<div id="outline-container-orge7c4355" class="outline-3">
-<h3 id="orge7c4355"><span class="section-number-3">1.5</span> MariaDB</h3>
+<div id="outline-container-orgec54652" class="outline-3">
+<h3 id="orgec54652"><span class="section-number-3">1.5</span> MariaDB</h3>
 </div>
 
-<div id="outline-container-orgc9130e2" class="outline-3">
-<h3 id="orgc9130e2"><span class="section-number-3">1.6</span> FAQ</h3>
+<div id="outline-container-org0525db1" class="outline-3">
+<h3 id="org0525db1"><span class="section-number-3">1.6</span> FAQ</h3>
 <div class="outline-text-3" id="text-1-6">
 </div>
-<div id="outline-container-org7e97122" class="outline-4">
-<h4 id="org7e97122"><span class="section-number-4">1.6.1</span> What tool did you use to create this documentation?</h4>
+<div id="outline-container-org896851a" class="outline-4">
+<h4 id="org896851a"><span class="section-number-4">1.6.1</span> What tool did you use to create this documentation?</h4>
 <div class="outline-text-4" id="text-1-6-1">
 <p>
 Emacs and org-mode, with the <a href="https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup">Big Blow theme</a>. The source is docs.org (in this folder).
@@ -327,8 +441,8 @@ Emacs and org-mode, with the <a href="https://fniessen.github.io/org-html-themes
 </div>
 </div>
 
-<div id="outline-container-orgddef678" class="outline-4">
-<h4 id="orgddef678"><span class="section-number-4">1.6.2</span> How do you generate HTML on Org Mode?</h4>
+<div id="outline-container-orgdb63476" class="outline-4">
+<h4 id="orgdb63476"><span class="section-number-4">1.6.2</span> How do you generate HTML on Org Mode?</h4>
 <div class="outline-text-4" id="text-1-6-2">
 <p>
 <a href="https://orgmode.org/manual/HTML-export-commands.html#HTML-export-commands">By pressing C-c C-e h-h</a>.
@@ -336,8 +450,8 @@ Emacs and org-mode, with the <a href="https://fniessen.github.io/org-html-themes
 </div>
 </div>
 
-<div id="outline-container-org94f812d" class="outline-4">
-<h4 id="org94f812d"><span class="section-number-4">1.6.3</span> How did you set up this project?</h4>
+<div id="outline-container-orgd5f8ad5" class="outline-4">
+<h4 id="orgd5f8ad5"><span class="section-number-4">1.6.3</span> How did you set up this project?</h4>
 <div class="outline-text-4" id="text-1-6-3">
 <p>
 <a href="https://github.com/pydanny/cookiecutter-django">I used Django Cookiecutter</a>.
@@ -349,7 +463,7 @@ Emacs and org-mode, with the <a href="https://fniessen.github.io/org-html-themes
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: mikel</p>
-<p class="date">Created: 2020-06-27 sáb 09:53</p>
+<p class="date">Created: 2020-06-30 mar 16:55</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

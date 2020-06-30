@@ -1,5 +1,6 @@
 #+HTML_HEAD: <link href="https://github.com/kaushalmodi/.emacs.d/blob/master/misc/css/leuven_theme.css" rel="stylesheet">
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
+#+OPTIONS: ^:nil
 #+TITLE: Python Developer - Mikel Losada
 
 * DOCS
@@ -9,11 +10,49 @@ https://docs.docker.com/engine/install/
 ** Running Docker as a non sudo user
 https://docs.docker.com/engine/install/linux-postinstall/
 
-** Django app
-*** Docker setup
-#+BEGIN_SRC
-$ docker-compose -f local.yml up
+** Make commands
+*** setupmysql
+Creates the python_developer SQL database.
+
+Creates the mikel user with password 'mikel' and grants it all privileges, flushing them afterwards.
+
+*You will need to run this command after you do a fresh build.*
+*** up
+Runs Django, MariaDB and MongoDB containers.
+
+Access Django at 
+#+BEGIN_SRC 
+0.0.0.0:8000 
 #+END_SRC
+*** build
+Builds Django, MariaDB and MongoDB containers.
+*** createsuperuser
+Creates a Django superuser.
+
+Run this once to create a superuser and access the admin site at 
+#+BEGIN_SRC 
+0.0.0.0:8000/admin
+#+END_SRC 
+*** loadmongo
+Creates a Mongo collection in the python_developer_db database.
+
+*segments_input.json* and *restaurants_input.json* must be in the root folder.
+*** loadsql
+Populates the python_developer MySQL database.
+
+*segments_input.json* and *restaurants_input.json* must be in the root folder.
+*** dumpmongo
+Creates a dump of the python_developer_db Mongo database using mongodump. 
+
+This dump is gzip-compressed.
+*** dumpsql
+Creates a dump of the python_developer MySQL database using mysqldump. 
+
+This dump is in SQL format.
+*** dumpsqltojson
+Creates a dump of the python_developer MySQL database using the dumpsqltojson custom django-admin command.
+
+This dump is in JSON format.
 
 ** MongoDB
 
