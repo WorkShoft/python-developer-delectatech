@@ -73,3 +73,8 @@ MANY_QUERY_RESULT = [
         "average_price": 43.95,
     },
 ]
+
+VERY_SMALL_SEGMENT = {
+    "name": "Small Segment",
+    "uidentifier": "e12345df-e471-4f66-85af-2bacfd9d2e65",
+}

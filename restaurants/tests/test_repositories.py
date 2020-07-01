@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
-from restaurants.repositories import sqlrepository, mongorepository
 
 from django.test import TestCase
 
+from restaurants.repositories import sqlrepository, mongorepository
 from restaurants.tests import fixtures
 
 
