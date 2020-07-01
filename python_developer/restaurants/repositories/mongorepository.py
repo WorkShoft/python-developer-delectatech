@@ -40,15 +40,15 @@ class MongoRestaurantRepo(BaseRepo):
                 } 
             } 
         }
-
-        if first:
-            return self.collection.find_one({}, projection=projection)
         
         query =  [
             i["restaurants"][0]
             for i in self.collection.find({}, projection=projection)
             if i.get("restaurants")
         ]
+
+        if first:
+            return query[0]
         
         query_without_duplicates = [dict(i) for i in {tuple(q.items()) for q in query}]
 

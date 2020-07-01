@@ -36,17 +36,33 @@ $ make loadsql
 *** Generic queries
 I have provided a custom django-admin command to perform generic queries from the command line.
 
-Here's an example of using the *query* command to retrieve the first restaurant with a popularity rate over 5.5:
+The *query* command takes Python dictionaries such as 
+#+BEGIN_SRC bash
+{'popularity_rate': {'gt': 5.5},'satisfaction_rate': {'ne': None},}
+#+END_SRC 
+and displays the result of the query.
+
+Here's an example of using the command to retrieve the first restaurant with a popularity rate over 5.5:
 
 #+BEGIN_SRC bash
-docker-compose -f local.yml run django python manage.py query \
+$ docker-compose -f local.yml run django python manage.py query \
 "{'popularity_rate': {'gt': 5.5},'satisfaction_rate': {'ne': None},}" \
 --first
 #+END_SRC 
-
-And the output:
 #+BEGIN_SRC bash
 Venta los Cabezuelos
+#+END_SRC 
+
+By default, queries are run against the SQL database. 
+
+You can query the MongoDB database by adding the mongo flag. The as_dict flag has no effect on Mongo queries.
+
+Here's an example of using the *query* command against Mongo to get restaurants with over 100 reviews that have a popularity rate between 8 and 8.2:
+#+BEGIN_SRC bash
+$ docker-compose -f local.yml run django python manage.py query \ 
+"{'popularity_rate': {'gt': 8, 'lt': 8.2}, 'total_reviews': {'gt': 100}, \
+'satisfaction_rate': {'ne': None},}" \ 
+--mongo 
 #+END_SRC 
 
 Here are the command options:
@@ -62,7 +78,7 @@ The source code for these queries can be found at:
 - restaurants/management/commands/query.py
 
 If you wish to do queries with Python, you can do so by creating
-your own sqlrepository.RestaurantRepo and mongorepository.RestaurantRepo objects.
+your own sqlrepository.SqlRestaurantRepo and mongorepository.MongoRestaurantRepo objects.
 
 Here is an example with the Django shell:
 
@@ -73,7 +89,7 @@ $ make shell
 #+BEGIN_SRC python
 from restaurants.repositories import sqlrepository
 
-sqlrepo = sqlrepository.RestaurantRepo()
+sqlrepo = sqlrepository.SqlRestaurantRepo()
 
 params = {
     "popularity_rate": {"gt": 5.5},
