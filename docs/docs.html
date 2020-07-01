@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-06-30 mar 16:55 -->
+<!-- 2020-07-01 mié 13:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Python Developer - Mikel Losada</title>
@@ -246,30 +246,39 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6e6f711">1. DOCS</a>
+<li><a href="#org2248a55">1. DOCS</a>
 <ul>
-<li><a href="#org06e586f">1.1. Get Docker</a></li>
-<li><a href="#org6296389">1.2. Running Docker as a non sudo user</a></li>
-<li><a href="#org360c53e">1.3. Make commands</a>
+<li><a href="#orgb82d705">1.1. Setting up the project</a></li>
+<li><a href="#orgdc388fb">1.2. MySQL / MariaDB import</a>
 <ul>
-<li><a href="#orge180d30">1.3.1. setupmysql</a></li>
-<li><a href="#org5c7fef7">1.3.2. up</a></li>
-<li><a href="#orgbb9e971">1.3.3. build</a></li>
-<li><a href="#org0710bcf">1.3.4. createsuperuser</a></li>
-<li><a href="#org49d282e">1.3.5. loadmongo</a></li>
-<li><a href="#orgd0c407a">1.3.6. loadsql</a></li>
-<li><a href="#org6a24ed6">1.3.7. dumpmongo</a></li>
-<li><a href="#org4edc076">1.3.8. dumpsql</a></li>
-<li><a href="#orgfa5c10f">1.3.9. dumpsqltojson</a></li>
+<li><a href="#orgdd5657c">1.2.1. Restoring the database</a></li>
+<li><a href="#orgaf60edf">1.2.2. Loading fixtures</a></li>
+<li><a href="#orgfeb9b3f">1.2.3. Generic queries</a></li>
+<li><a href="#orgb5418a4">1.2.4. Exporting SQL to JSON</a></li>
 </ul>
 </li>
-<li><a href="#orgdad9c63">1.4. MongoDB</a></li>
-<li><a href="#orgec54652">1.5. MariaDB</a></li>
-<li><a href="#org0525db1">1.6. FAQ</a>
+<li><a href="#orgdae5356">1.3. MongoDB import</a>
 <ul>
-<li><a href="#org896851a">1.6.1. What tool did you use to create this documentation?</a></li>
-<li><a href="#orgdb63476">1.6.2. How do you generate HTML on Org Mode?</a></li>
-<li><a href="#orgd5f8ad5">1.6.3. How did you set up this project?</a></li>
+<li><a href="#orgdbef1b9">1.3.1. Restoring the database</a></li>
+<li><a href="#org7794562">1.3.2. Loading fixtures</a></li>
+<li><a href="#org5ac55d8">1.3.3. Exporting MongoDB to JSON</a></li>
+</ul>
+</li>
+<li><a href="#org38c6949">1.4. Data migration</a>
+<ul>
+<li><a href="#org3a6c7bb">1.4.1. MongoDB to SQL</a></li>
+<li><a href="#orgd17fbc5">1.4.2. SQL to MongoDB</a></li>
+</ul>
+</li>
+<li><a href="#org62d853f">1.5. CRUD app</a></li>
+<li><a href="#org4273421">1.6. Appendix</a>
+<ul>
+<li><a href="#orgd23a105">1.6.1. Make commands</a></li>
+<li><a href="#org5d35e3f">1.6.2. Get Docker</a></li>
+<li><a href="#orgb95ab5b">1.6.3. Running Docker as a non sudo user</a></li>
+<li><a href="#org50656c6">1.6.4. What tool did you use to create this documentation?</a></li>
+<li><a href="#org60272e2">1.6.5. How do you generate HTML on Org Mode?</a></li>
+<li><a href="#org7ff2bc1">1.6.6. How did you set up this project?</a></li>
 </ul>
 </li>
 </ul>
@@ -278,51 +287,311 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org6e6f711" class="outline-2">
-<h2 id="org6e6f711"><span class="section-number-2">1</span> DOCS</h2>
+<div id="outline-container-org2248a55" class="outline-2">
+<h2 id="org2248a55"><span class="section-number-2">1</span> DOCS</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org06e586f" class="outline-3">
-<h3 id="org06e586f"><span class="section-number-3">1.1</span> Get Docker</h3>
+<div id="outline-container-orgb82d705" class="outline-3">
+<h3 id="orgb82d705"><span class="section-number-3">1.1</span> Setting up the project</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-<a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a>
+I have provided some Make commands to set up the Docker containers and prepare the MySQL database.
 </p>
-</div>
+<div class="org-src-container">
+<pre class="src src-bash">$ make build
+$ make setupmysql
+</pre>
 </div>
 
-<div id="outline-container-org6296389" class="outline-3">
-<h3 id="org6296389"><span class="section-number-3">1.2</span> Running Docker as a non sudo user</h3>
-<div class="outline-text-3" id="text-1-2">
 <p>
-<a href="https://docs.docker.com/engine/install/linux-postinstall/">https://docs.docker.com/engine/install/linux-postinstall/</a>
+You will need to create a Django superuser to access the app.
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ make createsuperuser
+</pre>
+</div>
+
+<p>
+You can now log in at <a href="http://0.0.0.0:8000/accounts/login/">http://0.0.0.0:8000/accounts/login/</a>.
+</p>
+
+<p>
+You will receive a confirmation message in the terminal where you are running the application.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org360c53e" class="outline-3">
-<h3 id="org360c53e"><span class="section-number-3">1.3</span> Make commands</h3>
+<div id="outline-container-orgdc388fb" class="outline-3">
+<h3 id="orgdc388fb"><span class="section-number-3">1.2</span> MySQL / MariaDB import</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-orgdd5657c" class="outline-4">
+<h4 id="orgdd5657c"><span class="section-number-4">1.2.1</span> Restoring the database</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+I have provided a dump created with <b>mysqldump</b> at <b>dumps/mysql.gz</b>.
+</p>
+
+<p>
+This dump has been created using the Make dumpsql command (in the Makefile of this project).
+</p>
+</div>
+</div>
+<div id="outline-container-orgaf60edf" class="outline-4">
+<h4 id="orgaf60edf"><span class="section-number-4">1.2.2</span> Loading fixtures</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+Copy restaurants_input.json and segments_input.json to the root folder of this project (where manage.py is).
+</p>
+
+<p>
+Run this command to load the data:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ make loadsql
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfeb9b3f" class="outline-4">
+<h4 id="orgfeb9b3f"><span class="section-number-4">1.2.3</span> Generic queries</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+You can do generic queries using the RestaurantRepo at restaurants/repository.py
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span class="org-variable-name">params</span> = {
+    <span class="org-string">"popularity_rate"</span>: {<span class="org-string">"gt"</span>: 5.5},
+    <span class="org-string">"satisfaction_rate"</span>: {<span class="org-string">"ne"</span>: <span class="org-constant">None</span>},
+}
+
+<span class="org-variable-name">results</span> = <span class="org-keyword">self</span>.query_restaurants(params)
+<span class="org-variable-name">first_result</span> = <span class="org-keyword">self</span>.query_restaurants_first(params)
+</pre>
+</div>
+
+<p>
+I have provided a custom django-admin command to perform generic queries from the command line.
+</p>
+
+<p>
+Here's an example of using the <b>query</b> command:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">docker-compose -f local.yml run django python manage.py query <span class="org-string">\ </span>
+<span class="org-string">"{'popularity_rate': {'gt': 5.5},'satisfaction_rate': {'ne': None},}"</span> <span class="org-sh-escaped-newline">\</span>
+--sql --first
+</pre>
+</div>
+
+<p>
+And the output:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">Venta los Cabezuelos
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb5418a4" class="outline-4">
+<h4 id="orgb5418a4"><span class="section-number-4">1.2.4</span> Exporting SQL to JSON</h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+Exporting the SQL database to a JSON file is supported, via the dumpsqltojson django-admin custom command.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make dumpsqltojson
+</pre>
+</div>
+
+<p>
+The format of the JSON file will be like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-json">{
+  <span class="org-json-mode-object-name">"e97827dfe4714f6685af2bacfd9d2e65"</span>: {
+    <span class="org-json-mode-object-name">"name"</span>: <span class="org-string">"Small Segment"</span>,
+    <span class="org-json-mode-object-name">"size"</span>: 1000,
+    <span class="org-json-mode-object-name">"uidentifier"</span>: <span class="org-string">"e97827dfe4714f6685af2bacfd9d2e65"</span>,
+    <span class="org-json-mode-object-name">"restaurants"</span>: [
+      {
+        <span class="org-json-mode-object-name">"name"</span>: <span class="org-string">"El Caf\u00e8 Blau"</span>,
+        <span class="org-json-mode-object-name">"street_address"</span>: <span class="org-string">"Calle de Casp"</span>,
+        <span class="org-json-mode-object-name">"latitude"</span>: 41.3984659,
+        <span class="org-json-mode-object-name">"longitude"</span>: 2.1830135,
+        <span class="org-json-mode-object-name">"city_name"</span>: <span class="org-string">"Barcelona"</span>,
+        <span class="org-json-mode-object-name">"popularity_rate"</span>: 6.57,
+        <span class="org-json-mode-object-name">"satisfaction_rate"</span>: 6.95,
+        <span class="org-json-mode-object-name">"total_reviews"</span>: 2,
+        <span class="org-json-mode-object-name">"uidentifier"</span>: <span class="org-string">"d907f70e0b9145b381778d5a20032a25"</span>,
+        <span class="org-json-mode-object-name">"average_price"</span>: 5
+      },
+      ......
+    ]
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdae5356" class="outline-3">
+<h3 id="orgdae5356"><span class="section-number-3">1.3</span> MongoDB import</h3>
 <div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-orge180d30" class="outline-4">
-<h4 id="orge180d30"><span class="section-number-4">1.3.1</span> setupmysql</h4>
+<div id="outline-container-orgdbef1b9" class="outline-4">
+<h4 id="orgdbef1b9"><span class="section-number-4">1.3.1</span> Restoring the database</h4>
 <div class="outline-text-4" id="text-1-3-1">
+<p>
+I have provided a dump created with <b>mongodump</b> at <b>dumps/mongo.gz</b>.
+</p>
+
+<p>
+This dump has been created using the Make dumpmongo command (in the Makefile of this project).
+</p>
+</div>
+</div>
+<div id="outline-container-org7794562" class="outline-4">
+<h4 id="org7794562"><span class="section-number-4">1.3.2</span> Loading fixtures</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+Copy restaurants_input.json and segments_input.json to the root folder of this project (where manage.py is).
+Run this command to load the data:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ make loadmongo
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5ac55d8" class="outline-4">
+<h4 id="org5ac55d8"><span class="section-number-4">1.3.3</span> Exporting MongoDB to JSON</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+Exporting the SQL database to a JSON file is supported, via the dumpmongotojson django-admin custom command.
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ make dumpmongotojson
+</pre>
+</div>
+
+<p>
+The format of the JSON file will be like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-json">{
+  <span class="org-json-mode-object-name">"e97827dfe4714f6685af2bacfd9d2e65"</span>: {
+    <span class="org-json-mode-object-name">"name"</span>: <span class="org-string">"Small Segment"</span>,
+    <span class="org-json-mode-object-name">"size"</span>: 1000,
+    <span class="org-json-mode-object-name">"uidentifier"</span>: <span class="org-string">"e97827dfe4714f6685af2bacfd9d2e65"</span>,
+    <span class="org-json-mode-object-name">"restaurants"</span>: [
+      {
+        <span class="org-json-mode-object-name">"name"</span>: <span class="org-string">"El Caf\u00e8 Blau"</span>,
+        <span class="org-json-mode-object-name">"street_address"</span>: <span class="org-string">"Calle de Casp"</span>,
+        <span class="org-json-mode-object-name">"latitude"</span>: 41.3984659,
+        <span class="org-json-mode-object-name">"longitude"</span>: 2.1830135,
+        <span class="org-json-mode-object-name">"city_name"</span>: <span class="org-string">"Barcelona"</span>,
+        <span class="org-json-mode-object-name">"popularity_rate"</span>: 6.57,
+        <span class="org-json-mode-object-name">"satisfaction_rate"</span>: 6.95,
+        <span class="org-json-mode-object-name">"total_reviews"</span>: 2,
+        <span class="org-json-mode-object-name">"uidentifier"</span>: <span class="org-string">"d907f70e0b9145b381778d5a20032a25"</span>,
+        <span class="org-json-mode-object-name">"average_price"</span>: 5
+      },
+      ......
+    ]
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org38c6949" class="outline-3">
+<h3 id="org38c6949"><span class="section-number-3">1.4</span> Data migration</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-org3a6c7bb" class="outline-4">
+<h4 id="org3a6c7bb"><span class="section-number-4">1.4.1</span> MongoDB to SQL</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<div class="org-src-container">
+<pre class="src src-bash">$ make mongotosql
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd17fbc5" class="outline-4">
+<h4 id="orgd17fbc5"><span class="section-number-4">1.4.2</span> SQL to MongoDB</h4>
+<div class="outline-text-4" id="text-1-4-2">
+<div class="org-src-container">
+<pre class="src src-bash">$ make sqltomongo
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org62d853f" class="outline-3">
+<h3 id="org62d853f"><span class="section-number-3">1.5</span> CRUD app</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+The CRUD app uses Django and MySQL.
+</p>
+
+<p>
+Run the containers: 
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ make up
+</pre>
+</div>
+<p>
+Access the app at <a href="http://0.0.0.0:8000/admin/">http://0.0.0.0:8000/admin/</a>
+</p>
+
+<p>
+If you have not created a superuser yet, follow the instructions at the first section.
+</p>
+
+<p>
+The Restaurant and Segment views are at <a href="http://0.0.0.0:8000/admin/restaurants/restaurant/">http://0.0.0.0:8000/admin/restaurants/restaurant/</a> and <a href="http://0.0.0.0:8000/admin/restaurants/segment/">http://0.0.0.0:8000/admin/restaurants/segment/</a> respectively.
+</p>
+</div>
+</div>
+<div id="outline-container-org4273421" class="outline-3">
+<h3 id="org4273421"><span class="section-number-3">1.6</span> Appendix</h3>
+<div class="outline-text-3" id="text-1-6">
+</div>
+<div id="outline-container-orgd23a105" class="outline-4">
+<h4 id="orgd23a105"><span class="section-number-4">1.6.1</span> Make commands</h4>
+<div class="outline-text-4" id="text-1-6-1">
+</div>
+<ol class="org-ol">
+<li><a id="org29f9d23"></a>build<br />
+<div class="outline-text-5" id="text-1-6-1-1">
+<p>
+Builds Django, MariaDB and MongoDB containers.
+</p>
+</div>
+</li>
+<li><a id="org677e4d2"></a>setupmysql<br />
+<div class="outline-text-5" id="text-1-6-1-2">
 <p>
 Creates the python_developer SQL database.
 </p>
 
 <p>
-Creates the mikel user with password 'mikel' and grants it all privileges, flushing them afterwards.
+This script creates the mikel user with password 'mikel' and grants it all privileges, flushing them afterwards.
 </p>
 
 <p>
 <b>You will need to run this command after you do a fresh build.</b>
 </p>
 </div>
-</div>
-<div id="outline-container-org5c7fef7" class="outline-4">
-<h4 id="org5c7fef7"><span class="section-number-4">1.3.2</span> up</h4>
-<div class="outline-text-4" id="text-1-3-2">
+</li>
+<li><a id="orgbb34676"></a>up<br />
+<div class="outline-text-5" id="text-1-6-1-3">
 <p>
 Runs Django, MariaDB and MongoDB containers.
 </p>
@@ -334,18 +603,9 @@ Access Django at
 0.0.0.0:8000 
 </pre>
 </div>
-</div>
-<div id="outline-container-orgbb9e971" class="outline-4">
-<h4 id="orgbb9e971"><span class="section-number-4">1.3.3</span> build</h4>
-<div class="outline-text-4" id="text-1-3-3">
-<p>
-Builds Django, MariaDB and MongoDB containers.
-</p>
-</div>
-</div>
-<div id="outline-container-org0710bcf" class="outline-4">
-<h4 id="org0710bcf"><span class="section-number-4">1.3.4</span> createsuperuser</h4>
-<div class="outline-text-4" id="text-1-3-4">
+</li>
+<li><a id="org1ff8472"></a>createsuperuser<br />
+<div class="outline-text-5" id="text-1-6-1-4">
 <p>
 Creates a Django superuser.
 </p>
@@ -357,10 +617,9 @@ Run this once to create a superuser and access the admin site at
 0.0.0.0:8000/admin
 </pre>
 </div>
-</div>
-<div id="outline-container-org49d282e" class="outline-4">
-<h4 id="org49d282e"><span class="section-number-4">1.3.5</span> loadmongo</h4>
-<div class="outline-text-4" id="text-1-3-5">
+</li>
+<li><a id="orga147d47"></a>loadmongo<br />
+<div class="outline-text-5" id="text-1-6-1-5">
 <p>
 Creates a Mongo collection in the python_developer_db database.
 </p>
@@ -369,10 +628,9 @@ Creates a Mongo collection in the python_developer_db database.
 <b>segments_input.json</b> and <b>restaurants_input.json</b> must be in the root folder.
 </p>
 </div>
-</div>
-<div id="outline-container-orgd0c407a" class="outline-4">
-<h4 id="orgd0c407a"><span class="section-number-4">1.3.6</span> loadsql</h4>
-<div class="outline-text-4" id="text-1-3-6">
+</li>
+<li><a id="orgb7e69d1"></a>loadsql<br />
+<div class="outline-text-5" id="text-1-6-1-6">
 <p>
 Populates the python_developer MySQL database.
 </p>
@@ -381,78 +639,109 @@ Populates the python_developer MySQL database.
 <b>segments_input.json</b> and <b>restaurants_input.json</b> must be in the root folder.
 </p>
 </div>
-</div>
-<div id="outline-container-org6a24ed6" class="outline-4">
-<h4 id="org6a24ed6"><span class="section-number-4">1.3.7</span> dumpmongo</h4>
-<div class="outline-text-4" id="text-1-3-7">
+</li>
+<li><a id="org1c6d811"></a>dumpmongo<br />
+<div class="outline-text-5" id="text-1-6-1-7">
 <p>
-Creates a dump of the python_developer_db Mongo database using mongodump. 
-</p>
-
-<p>
-This dump is gzip-compressed.
+Creates a gzip-compressed dump of the python_developer_db Mongo database using <b>mongodump</b>. 
 </p>
 </div>
-</div>
-<div id="outline-container-org4edc076" class="outline-4">
-<h4 id="org4edc076"><span class="section-number-4">1.3.8</span> dumpsql</h4>
-<div class="outline-text-4" id="text-1-3-8">
+</li>
+<li><a id="org1d2fbd1"></a>dumpsql<br />
+<div class="outline-text-5" id="text-1-6-1-8">
 <p>
-Creates a dump of the python_developer MySQL database using mysqldump. 
-</p>
-
-<p>
-This dump is in SQL format.
+Creates a SQL dump of the python_developer MySQL database using <b>mysqldump</b>. 
 </p>
 </div>
-</div>
-<div id="outline-container-orgfa5c10f" class="outline-4">
-<h4 id="orgfa5c10f"><span class="section-number-4">1.3.9</span> dumpsqltojson</h4>
-<div class="outline-text-4" id="text-1-3-9">
+</li>
+<li><a id="orge2c232b"></a>dumpsqltojson<br />
+<div class="outline-text-5" id="text-1-6-1-9">
 <p>
-Creates a dump of the python_developer MySQL database using the dumpsqltojson custom django-admin command.
-</p>
-
-<p>
-This dump is in JSON format.
+Creates a JSON dump of the python_developer MySQL database.
 </p>
 </div>
+</li>
+<li><a id="orge11b1cc"></a>dumpmongotojson<br />
+<div class="outline-text-5" id="text-1-6-1-10">
+<p>
+Creates a JSON dump of the segment_collection Mongo collection.
+</p>
+</div>
+</li>
+<li><a id="orgb03bd88"></a>sqltomongo<br />
+<div class="outline-text-5" id="text-1-6-1-11">
+<p>
+Migrates the SQL database to a MongoDB collection.
+</p>
+</div>
+</li>
+<li><a id="org191b730"></a>mongotosql<br />
+<div class="outline-text-5" id="text-1-6-1-12">
+<p>
+Migrates the MongoDB segment collection to the Restaurant and Segment SQL tables.
+</p>
+</div>
+</li>
+<li><a id="org19c50da"></a>shell<br />
+<div class="outline-text-5" id="text-1-6-1-13">
+<p>
+Enters the IPython shell in the Django container.
+</p>
+</div>
+</li>
+<li><a id="orgfc51e53"></a>makemigrations<br />
+<div class="outline-text-5" id="text-1-6-1-14">
+<p>
+Creates Django migration files.
+</p>
+</div>
+</li>
+<li><a id="org057c6aa"></a>migrate<br />
+<div class="outline-text-5" id="text-1-6-1-15">
+<p>
+Migrates the database using migration files.
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org5d35e3f" class="outline-4">
+<h4 id="org5d35e3f"><span class="section-number-4">1.6.2</span> Get Docker</h4>
+<div class="outline-text-4" id="text-1-6-2">
+<p>
+<a href="https://docs.docker.com/engine/install/">https://docs.docker.com/engine/install/</a>
+</p>
 </div>
 </div>
-
-<div id="outline-container-orgdad9c63" class="outline-3">
-<h3 id="orgdad9c63"><span class="section-number-3">1.4</span> MongoDB</h3>
+<div id="outline-container-orgb95ab5b" class="outline-4">
+<h4 id="orgb95ab5b"><span class="section-number-4">1.6.3</span> Running Docker as a non sudo user</h4>
+<div class="outline-text-4" id="text-1-6-3">
+<p>
+<a href="https://docs.docker.com/engine/install/linux-postinstall/">https://docs.docker.com/engine/install/linux-postinstall/</a>
+</p>
 </div>
-
-<div id="outline-container-orgec54652" class="outline-3">
-<h3 id="orgec54652"><span class="section-number-3">1.5</span> MariaDB</h3>
 </div>
-
-<div id="outline-container-org0525db1" class="outline-3">
-<h3 id="org0525db1"><span class="section-number-3">1.6</span> FAQ</h3>
-<div class="outline-text-3" id="text-1-6">
-</div>
-<div id="outline-container-org896851a" class="outline-4">
-<h4 id="org896851a"><span class="section-number-4">1.6.1</span> What tool did you use to create this documentation?</h4>
-<div class="outline-text-4" id="text-1-6-1">
+<div id="outline-container-org50656c6" class="outline-4">
+<h4 id="org50656c6"><span class="section-number-4">1.6.4</span> What tool did you use to create this documentation?</h4>
+<div class="outline-text-4" id="text-1-6-4">
 <p>
 Emacs and org-mode, with the <a href="https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup">Big Blow theme</a>. The source is docs.org (in this folder).
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgdb63476" class="outline-4">
-<h4 id="orgdb63476"><span class="section-number-4">1.6.2</span> How do you generate HTML on Org Mode?</h4>
-<div class="outline-text-4" id="text-1-6-2">
+<div id="outline-container-org60272e2" class="outline-4">
+<h4 id="org60272e2"><span class="section-number-4">1.6.5</span> How do you generate HTML on Org Mode?</h4>
+<div class="outline-text-4" id="text-1-6-5">
 <p>
 <a href="https://orgmode.org/manual/HTML-export-commands.html#HTML-export-commands">By pressing C-c C-e h-h</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd5f8ad5" class="outline-4">
-<h4 id="orgd5f8ad5"><span class="section-number-4">1.6.3</span> How did you set up this project?</h4>
-<div class="outline-text-4" id="text-1-6-3">
+<div id="outline-container-org7ff2bc1" class="outline-4">
+<h4 id="org7ff2bc1"><span class="section-number-4">1.6.6</span> How did you set up this project?</h4>
+<div class="outline-text-4" id="text-1-6-6">
 <p>
 <a href="https://github.com/pydanny/cookiecutter-django">I used Django Cookiecutter</a>.
 </p>
@@ -463,7 +752,7 @@ Emacs and org-mode, with the <a href="https://fniessen.github.io/org-html-themes
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: mikel</p>
-<p class="date">Created: 2020-06-30 mar 16:55</p>
+<p class="date">Created: 2020-07-01 mié 13:19</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

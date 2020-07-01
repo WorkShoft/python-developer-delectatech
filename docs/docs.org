@@ -4,61 +4,211 @@
 #+TITLE: Python Developer - Mikel Losada
 
 * DOCS
-** Get Docker
-https://docs.docker.com/engine/install/
+#+NAME: project_setup
+** Setting up the project
+I have provided some Make commands to set up the Docker containers and prepare the MySQL database.
+#+BEGIN_SRC bash
+$ make build
+$ make setupmysql
+#+END_SRC 
 
-** Running Docker as a non sudo user
-https://docs.docker.com/engine/install/linux-postinstall/
+You will need to create a Django superuser to access the app.
+#+BEGIN_SRC bash
+$ make createsuperuser
+#+END_SRC 
 
-** Make commands
-*** setupmysql
+You can now log in at http://0.0.0.0:8000/accounts/login/.
+
+You will receive a confirmation message in the terminal where you are running the application.
+
+** MySQL / MariaDB import
+*** Restoring the database
+I have provided a dump created with *mysqldump* at *dumps/mysql.gz*.
+
+This dump has been created using the Make dumpsql command (in the Makefile of this project).
+*** Loading fixtures 
+Copy restaurants_input.json and segments_input.json to the root folder of this project (where manage.py is).
+
+Run this command to load the data:
+#+BEGIN_SRC bash
+$ make loadsql
+#+END_SRC 
+*** Generic queries
+You can do generic queries using the RestaurantRepo at restaurants/repository.py
+#+BEGIN_SRC python
+params = {
+    "popularity_rate": {"gt": 5.5},
+    "satisfaction_rate": {"ne": None},
+}
+
+results = self.query_restaurants(params)
+first_result = self.query_restaurants_first(params)
+#+END_SRC 
+
+I have provided a custom django-admin command to perform generic queries from the command line.
+
+Here's an example of using the *query* command:
+
+#+BEGIN_SRC bash
+docker-compose -f local.yml run django python manage.py query \ 
+"{'popularity_rate': {'gt': 5.5},'satisfaction_rate': {'ne': None},}" \
+--sql --first
+#+END_SRC 
+
+And the output:
+#+BEGIN_SRC bash
+Venta los Cabezuelos
+#+END_SRC 
+
+*** Exporting SQL to JSON
+Exporting the SQL database to a JSON file is supported, via the dumpsqltojson django-admin custom command.
+
+#+BEGIN_SRC bash
+$ make dumpsqltojson
+#+END_SRC
+
+The format of the JSON file will be like this:
+#+BEGIN_SRC json
+{
+  "e97827dfe4714f6685af2bacfd9d2e65": {
+    "name": "Small Segment",
+    "size": 1000,
+    "uidentifier": "e97827dfe4714f6685af2bacfd9d2e65",
+    "restaurants": [
+      {
+	"name": "El Caf\u00e8 Blau",
+	"street_address": "Calle de Casp",
+	"latitude": 41.3984659,
+	"longitude": 2.1830135,
+	"city_name": "Barcelona",
+	"popularity_rate": 6.57,
+	"satisfaction_rate": 6.95,
+	"total_reviews": 2,
+	"uidentifier": "d907f70e0b9145b381778d5a20032a25",
+	"average_price": 5
+      },
+      ......
+    ]
+  }
+}
+#+END_SRC
+** MongoDB import
+*** Restoring the database
+I have provided a dump created with *mongodump* at *dumps/mongo.gz*.
+
+This dump has been created using the Make dumpmongo command (in the Makefile of this project).
+*** Loading fixtures
+Copy restaurants_input.json and segments_input.json to the root folder of this project (where manage.py is).
+Run this command to load the data:
+#+BEGIN_SRC bash
+$ make loadmongo
+#+END_SRC 
+*** Exporting MongoDB to JSON
+Exporting the SQL database to a JSON file is supported, via the dumpmongotojson django-admin custom command.
+#+BEGIN_SRC bash
+$ make dumpmongotojson
+#+END_SRC
+ 
+The format of the JSON file will be like this:
+#+BEGIN_SRC json
+{
+  "e97827dfe4714f6685af2bacfd9d2e65": {
+    "name": "Small Segment",
+    "size": 1000,
+    "uidentifier": "e97827dfe4714f6685af2bacfd9d2e65",
+    "restaurants": [
+      {
+	"name": "El Caf\u00e8 Blau",
+	"street_address": "Calle de Casp",
+	"latitude": 41.3984659,
+	"longitude": 2.1830135,
+	"city_name": "Barcelona",
+	"popularity_rate": 6.57,
+	"satisfaction_rate": 6.95,
+	"total_reviews": 2,
+	"uidentifier": "d907f70e0b9145b381778d5a20032a25",
+	"average_price": 5
+      },
+      ......
+    ]
+  }
+}
+#+END_SRC
+** Data migration
+*** MongoDB to SQL
+#+BEGIN_SRC bash
+$ make mongotosql
+#+END_SRC 
+*** SQL to MongoDB
+#+BEGIN_SRC bash
+$ make sqltomongo
+#+END_SRC 
+** CRUD app
+The CRUD app uses Django and MySQL.
+
+Run the containers: 
+#+BEGIN_SRC bash
+$ make up
+#+END_SRC
+Access the app at http://0.0.0.0:8000/admin/
+
+If you have not created a superuser yet, follow the instructions at the first section.
+
+The Restaurant and Segment views are at http://0.0.0.0:8000/admin/restaurants/restaurant/ and http://0.0.0.0:8000/admin/restaurants/segment/ respectively.
+** Appendix
+*** Make commands
+**** build
+Builds Django, MariaDB and MongoDB containers.
+**** setupmysql
 Creates the python_developer SQL database.
 
-Creates the mikel user with password 'mikel' and grants it all privileges, flushing them afterwards.
+This script creates the mikel user with password 'mikel' and grants it all privileges, flushing them afterwards.
 
 *You will need to run this command after you do a fresh build.*
-*** up
+**** up
 Runs Django, MariaDB and MongoDB containers.
 
 Access Django at 
 #+BEGIN_SRC 
 0.0.0.0:8000 
 #+END_SRC
-*** build
-Builds Django, MariaDB and MongoDB containers.
-*** createsuperuser
+**** createsuperuser
 Creates a Django superuser.
 
 Run this once to create a superuser and access the admin site at 
 #+BEGIN_SRC 
 0.0.0.0:8000/admin
 #+END_SRC 
-*** loadmongo
+**** loadmongo
 Creates a Mongo collection in the python_developer_db database.
 
 *segments_input.json* and *restaurants_input.json* must be in the root folder.
-*** loadsql
+**** loadsql
 Populates the python_developer MySQL database.
 
 *segments_input.json* and *restaurants_input.json* must be in the root folder.
-*** dumpmongo
-Creates a dump of the python_developer_db Mongo database using mongodump. 
-
-This dump is gzip-compressed.
-*** dumpsql
-Creates a dump of the python_developer MySQL database using mysqldump. 
-
-This dump is in SQL format.
-*** dumpsqltojson
-Creates a dump of the python_developer MySQL database using the dumpsqltojson custom django-admin command.
-
-This dump is in JSON format.
-
-** MongoDB
-
-** MariaDB
-
-** FAQ
+**** dumpmongo
+Creates a gzip-compressed dump of the python_developer_db Mongo database using *mongodump*. 
+**** dumpsql
+Creates a SQL dump of the python_developer MySQL database using *mysqldump*. 
+**** dumpsqltojson
+Creates a JSON dump of the python_developer MySQL database.
+**** dumpmongotojson
+Creates a JSON dump of the segment_collection Mongo collection.
+**** sqltomongo
+Migrates the SQL database to a MongoDB collection.
+**** mongotosql
+Migrates the MongoDB segment collection to the Restaurant and Segment SQL tables.
+**** shell
+Enters the IPython shell in the Django container.
+**** makemigrations
+Creates Django migration files.
+**** migrate
+Migrates the database using migration files.
+*** Get Docker
+https://docs.docker.com/engine/install/
+*** Running Docker as a non sudo user
+https://docs.docker.com/engine/install/linux-postinstall/
 *** What tool did you use to create this documentation?
 Emacs and org-mode, with the [[https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup][Big Blow theme]]. The source is docs.org (in this folder).
 
