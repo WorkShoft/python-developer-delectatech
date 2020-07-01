@@ -17,6 +17,7 @@ services:
       - 3306
   mongo:
     image: mongo
+    container_name: python_developer_mongo
     command: ["--bind_ip_all"]
     restart: always
     ports:
