@@ -4,6 +4,8 @@ setupmysql:
 	docker exec -i python_developer_mysql mysql -uroot -proot < scripts/setup_mysql.sql
 up:
 	docker-compose -f local.yml up --remove-orphans
+test:
+	docker-compose -f local.yml run django pytest --cov-report html:docs --cov=restaurants restaurants/tests/
 createsuperuser:
 	docker-compose -f local.yml run django python manage.py createsuperuser
 loadmongo:
@@ -32,3 +34,7 @@ makemigrations:
 	docker-compose -f local.yml run django python manage.py makemigrations
 migrate:
 	docker-compose -f local.yml run django python manage.py migrate
+black:
+	docker-compose -f local.yml run django black .
+
+
