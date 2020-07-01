@@ -5,7 +5,7 @@ setupmysql:
 up:
 	docker-compose -f local.yml up --remove-orphans
 test:
-	docker-compose -f local.yml run django pytest --cov-report html:docs --cov=restaurants restaurants/tests/
+	docker-compose -f local.yml run django pytest --cov-report html:docs/coverage --cov=restaurants restaurants/tests/
 createsuperuser:
 	docker-compose -f local.yml run django python manage.py createsuperuser
 loadmongo:
