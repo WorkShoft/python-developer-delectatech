@@ -78,3 +78,8 @@ VERY_SMALL_SEGMENT = {
     "name": "Small Segment",
     "uidentifier": "e12345df-e471-4f66-85af-2bacfd9d2e65",
 }
+
+PARAMS = {
+                "popularity_rate": {"gt": 5.5},
+                "satisfaction_rate": {"ne": None},
+            }
