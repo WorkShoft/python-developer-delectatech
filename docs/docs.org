@@ -34,30 +34,54 @@ Run this command to load the data:
 $ make loadsql
 #+END_SRC 
 *** Generic queries
-You can do generic queries using the RestaurantRepo at restaurants/repository.py
-#+BEGIN_SRC python
-params = {
-    "popularity_rate": {"gt": 5.5},
-    "satisfaction_rate": {"ne": None},
-}
-
-results = self.query_restaurants(params)
-first_result = self.query_restaurants_first(params)
-#+END_SRC 
-
 I have provided a custom django-admin command to perform generic queries from the command line.
 
-Here's an example of using the *query* command:
+Here's an example of using the *query* command to retrieve the first restaurant with a popularity rate over 5.5:
 
 #+BEGIN_SRC bash
-docker-compose -f local.yml run django python manage.py query \ 
+docker-compose -f local.yml run django python manage.py query \
 "{'popularity_rate': {'gt': 5.5},'satisfaction_rate': {'ne': None},}" \
---sql --first
+--first
 #+END_SRC 
 
 And the output:
 #+BEGIN_SRC bash
 Venta los Cabezuelos
+#+END_SRC 
+
+Here are the command options:
+
+| OPTION    | INFO                                    |
+| first     | displays first query result             |
+| as_dict   | displays query result(s) in dict format |
+| mongo     | queries the MongoDB database            |
+
+The source code for these queries can be found at:
+- restaurants/repositories/sqlrepository.py
+- restaurants/repositories/mongorepository.py
+- restaurants/management/commands/query.py
+
+If you wish to do queries with Python, you can do so by creating
+your own sqlrepository.RestaurantRepo and mongorepository.RestaurantRepo objects.
+
+Here is an example with the Django shell:
+
+#+BEGIN_SRC bash
+$ make shell
+#+END_SRC 
+
+#+BEGIN_SRC python
+from restaurants.repositories import sqlrepository
+
+sqlrepo = sqlrepository.RestaurantRepo()
+
+params = {
+    "popularity_rate": {"gt": 5.5},
+    "satisfaction_rate": {"ne": None},
+}
+
+results = sqlrepo.query_restaurants(params)
+first_result = sqlrepo.query_restaurants_first(params)
 #+END_SRC 
 
 *** Exporting SQL to JSON
@@ -136,10 +160,12 @@ The format of the JSON file will be like this:
 #+END_SRC
 ** Data migration
 *** MongoDB to SQL
+/restaurants/management/commands/mongotosql.py/
 #+BEGIN_SRC bash
 $ make mongotosql
 #+END_SRC 
 *** SQL to MongoDB
+/restaurants/management/commands/sqltomongo.py/
 #+BEGIN_SRC bash
 $ make sqltomongo
 #+END_SRC 
