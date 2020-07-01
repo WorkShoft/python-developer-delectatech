@@ -6,15 +6,23 @@ from django.test import TestCase
 from restaurants.tests import fixtures
 
 
-class TestRepositories(TestCase):    
-    def setUp(self):        
+class TestRepositories(TestCase):
+    def setUp(self):
         self.sqlrepo = sqlrepository.SqlRestaurantRepo()
         self.mongorepo = mongorepository.MongoRestaurantRepo()
 
-        self.sqlrepo.query_restaurants_first = MagicMock(return_value=fixtures.SINGLE_QUERY_RESULT)
-        self.sqlrepo.query_restaurants = MagicMock(return_value=fixtures.MANY_QUERY_RESULT)
-        self.mongorepo.query_restaurants_first = MagicMock(return_value=fixtures.SINGLE_QUERY_RESULT)
-        self.mongorepo.query_restaurants = MagicMock(return_value=fixtures.MANY_QUERY_RESULT)
+        self.sqlrepo.query_restaurants_first = MagicMock(
+            return_value=fixtures.SINGLE_QUERY_RESULT
+        )
+        self.sqlrepo.query_restaurants = MagicMock(
+            return_value=fixtures.MANY_QUERY_RESULT
+        )
+        self.mongorepo.query_restaurants_first = MagicMock(
+            return_value=fixtures.SINGLE_QUERY_RESULT
+        )
+        self.mongorepo.query_restaurants = MagicMock(
+            return_value=fixtures.MANY_QUERY_RESULT
+        )
 
     def test_sqlrepo_query_restaurants_first(self):
         result = self.sqlrepo.query_restaurants_first()

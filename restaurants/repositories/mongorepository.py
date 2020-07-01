@@ -25,23 +25,20 @@ class MongoRestaurantRepo(BaseRepo):
         """
 
         params = {
-            field: {
-                f'${operator}': value for operator, value in condition.items()
-            } for field, condition in params.items()
+            field: {f"${operator}": value for operator, value in condition.items()}
+            for field, condition in params.items()
         }
-        
+
         projection = {
             "_id": 0,
-            "restaurants": { 
-                "$elemMatch": { 
-                    "$and": [ 
-                        {field:condition} for field, condition in params.items()     
-                    ] 
-                } 
-            } 
+            "restaurants": {
+                "$elemMatch": {
+                    "$and": [{field: condition} for field, condition in params.items()]
+                }
+            },
         }
-        
-        query =  [
+
+        query = [
             i["restaurants"][0]
             for i in self.collection.find({}, projection=projection)
             if i.get("restaurants")
@@ -49,8 +46,7 @@ class MongoRestaurantRepo(BaseRepo):
 
         if first:
             return query[0]
-        
+
         query_without_duplicates = [dict(i) for i in {tuple(q.items()) for q in query}]
 
         return query_without_duplicates
-

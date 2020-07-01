@@ -6,12 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('restaurants', '0006_auto_20200628_1508'),
+        ("restaurants", "0006_auto_20200628_1508"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='segment',
-            name='size',
-        ),
+        migrations.RemoveField(model_name="segment", name="size",),
     ]

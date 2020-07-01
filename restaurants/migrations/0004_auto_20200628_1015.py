@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('restaurants', '0003_auto_20200628_1013'),
+        ("restaurants", "0003_auto_20200628_1013"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='restaurant',
-            name='popularity_rate',
+            model_name="restaurant",
+            name="popularity_rate",
             field=models.DecimalField(decimal_places=2, max_digits=4, null=True),
         ),
         migrations.AlterField(
-            model_name='restaurant',
-            name='satisfaction_rate',
+            model_name="restaurant",
+            name="satisfaction_rate",
             field=models.DecimalField(decimal_places=2, max_digits=4, null=True),
         ),
     ]

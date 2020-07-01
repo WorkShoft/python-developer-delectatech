@@ -5,9 +5,8 @@ from restaurants.models import Restaurant
 from restaurants.custom_lookups import NotEqual
 
 
+Field.register_lookup(NotEqual)
 
-Field.register_lookup(NotEqual)    
-    
 
 class SqlRestaurantRepo(BaseRepo):
     model = Restaurant
@@ -28,11 +27,11 @@ class SqlRestaurantRepo(BaseRepo):
         as_dict : bool, optional
             Whether you want to display the results in dict form
         """
-        
+
         filter_kwargs = {}
         exclude_kwargs = {}
         query = []
-        
+
         for p in params:
             for operator, value in params[p].items():
                 if value is not None:
@@ -40,12 +39,10 @@ class SqlRestaurantRepo(BaseRepo):
                 else:
                     exclude_kwargs[f"{p}__isnull"] = True
 
-
         query = self.model.objects.filter(**filter_kwargs)
 
         query = query.exclude(**exclude_kwargs) if exclude_kwargs else query
         query = [query[0]] if first else query
         query = [i.as_dict() for i in query] if as_dict else query
-        
+
         return query[0] if first else query
-    
