@@ -16,7 +16,7 @@ dumpmongo:
 	@echo "Dump completed"
 dumpsql:
 	@echo "Dumping a compressed MySQL database..."
-	docker exec -i python_developer_mysql mysqldump -uroot -proot python_developer | gzip > dumps/mysql_`date "+%Y-%m-%d"`.gzip
+	docker exec -i python_developer_mysql mysqldump -uroot -proot python_developer | gzip > dumps/mysql_`date "+%Y-%m-%d"`.gz
 	@echo "Dump completed"
 dumpmongotojson:
 	docker-compose -f local.yml run django python manage.py dumpmongotojson segment_collection_`date "+%Y-%m-%d"`.json
