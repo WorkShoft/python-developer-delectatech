@@ -197,6 +197,12 @@ Access the app at http://0.0.0.0:8000/admin/
 If you have not created a superuser yet, follow the instructions at the first section.
 
 The Restaurant and Segment views are at http://0.0.0.0:8000/admin/restaurants/restaurant/ and http://0.0.0.0:8000/admin/restaurants/segment/ respectively.
+** Running tests
+I have provided a *test* Make command thats runs pytest on /restaurants/tests/ and creates an HTML report at /docs/coverage/index.html/
+
+#+BEGIN_SRC bash
+$ make test
+#+END_SRC
 ** Appendix
 *** Make commands
 **** build
