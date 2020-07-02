@@ -265,7 +265,7 @@ https://docs.docker.com/engine/install/
 *** Running Docker as a non sudo user
 https://docs.docker.com/engine/install/linux-postinstall/
 *** What tool did you use to create this documentation?
-Emacs and org-mode, with the [[https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup][Big Blow theme]]. The source is docs.org (in this folder).
+Emacs and org-mode, with the [[https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup][Big Blow theme]]. The source is at docs/README.org.
 
 *** How do you generate HTML on Org Mode?
 [[https://orgmode.org/manual/HTML-export-commands.html#HTML-export-commands][By pressing C-c C-e h-h]].
