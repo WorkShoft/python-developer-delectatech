@@ -10,17 +10,17 @@
 I have provided some Make commands to set up the Docker containers and prepare the MySQL database.
 #+BEGIN_SRC bash
 $ make build
+#+END_SRC 
+
+Run the containers on a terminal:
+#+BEGIN_SRC bash
+$ make up
+#+END_SRC 
+
+Set up MySQL like this from another terminal:
+#+BEGIN_SRC bash
 $ make setupmysql
 #+END_SRC 
-
-You will need to create a Django superuser to access the app.
-#+BEGIN_SRC bash
-$ make createsuperuser
-#+END_SRC 
-
-You can now log in at http://0.0.0.0:8000/accounts/login/.
-
-You will receive a confirmation message in the terminal where you are running the application.
 
 ** MySQL / MariaDB import
 *** Restoring the database
@@ -189,13 +189,19 @@ $ make sqltomongo
 ** CRUD app
 The CRUD app uses Django and MySQL.
 
-Run the containers: 
+You need to create a Django superuser to access the app.
+#+BEGIN_SRC bash
+$ make createsuperuser
+#+END_SRC 
+
+Run the containers:
 #+BEGIN_SRC bash
 $ make up
 #+END_SRC
-Access the app at http://0.0.0.0:8000/admin/
 
-If you have not created a superuser yet, follow the instructions at the first section.
+You can now access the app at http://0.0.0.0:8000/admin/ with your user credentials.
+
+You will receive a confirmation message in the terminal where you are running the application.
 
 The Restaurant and Segment views are at http://0.0.0.0:8000/admin/restaurants/restaurant/ and http://0.0.0.0:8000/admin/restaurants/segment/ respectively.
 ** Running tests
