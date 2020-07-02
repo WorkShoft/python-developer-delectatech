@@ -1,6 +1,7 @@
 #+HTML_HEAD: <link href="https://github.com/kaushalmodi/.emacs.d/blob/master/misc/css/leuven_theme.css" rel="stylesheet">
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
 #+OPTIONS: ^:nil
+[[https://img.shields.io/badge/code%20style-black-000000.svg]]
 #+TITLE: Python Developer - Mikel Losada
 
 * DOCS
