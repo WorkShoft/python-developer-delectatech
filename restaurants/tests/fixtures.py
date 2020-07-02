@@ -80,6 +80,6 @@ VERY_SMALL_SEGMENT = {
 }
 
 PARAMS = {
-                "popularity_rate": {"gt": 5.5},
-                "satisfaction_rate": {"ne": None},
-            }
+    "popularity_rate": {"gt": 5.5},
+    "satisfaction_rate": {"ne": None},
+}

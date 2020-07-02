@@ -49,8 +49,10 @@ class TestRepositories(TestCase):
     def test_mongorepo_query_restaurants(self):
         result = self.mongorepo.query_restaurants()
         self.assertEqual(result, fixtures.MANY_QUERY_RESULT)
-        
+
     def test_mongorepo_query_internal(self):
         result = self.mongorepo._query(params=fixtures.PARAMS)
 
-        self.assertEqual(result[0]["uidentifier"], fixtures.MANY_QUERY_RESULT[0]["uidentifier"])
+        self.assertEqual(
+            result[0]["uidentifier"], fixtures.MANY_QUERY_RESULT[0]["uidentifier"]
+        )
